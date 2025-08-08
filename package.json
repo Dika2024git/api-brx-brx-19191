@@ -1,0 +1,26 @@
+{
+  "name": "xml-chatbot-express",
+  "version": "1.0.0",
+  "description": "AI Chatbot canggih dengan konfigurasi dari data.xml",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "chatbot",
+    "ai",
+    "express",
+    "xml",
+    "fusejs"
+  ],
+  "author": "Gemini",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "express": "^4.19.2",
+    "fuse.js": "^7.0.0",
+    "language-detect": "^1.2.2",
+    "natural": "^7.0.6",
+    "xml2js": "^0.6.2"
+  }
+}
