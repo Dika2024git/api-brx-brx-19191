@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chatbotConfig>
+
+    <!-- PENGATURAN GLOBAL -->
+    <settings>
+        <!-- API untuk fallback jika jawaban tidak ditemukan di lokal -->
+        <!-- Contoh API sederhana yang bisa Anda buat sendiri -->
+        <apiFallback url="http://localhost:3001/get-fact" />
+        
+        <!-- Threshold default untuk Fuse.js (0.0 = sempurna, 1.0 = apa saja cocok) -->
+        <defaultThreshold>0.45</defaultThreshold>
+        
+        <!-- Jenis tokenizer dari library 'natural' (e.g., WordTokenizer, TreebankWordTokenizer) -->
+        <tokenizer>WordTokenizer</tokenizer>
+        
+        <!-- Aktifkan/nonaktifkan deteksi bahasa otomatis -->
+        <autoDetectLanguage>true</autoDetectLanguage>
+    </settings>
+
+    <!-- DAFTAR INTENT -->
+    <!-- Intent digunakan untuk mengelompokkan maksud dari pertanyaan pengguna -->
+    <intents>
+        <intent name="greeting" group="basic">
+            <keywords>
+                <k weight="1.0">halo</k>
+                <k weight="1.0">hai</k>
+                <k weight="0.9">pagi</k>
+                <k weight="0.9">siang</k>
+                <k weight="0.9">sore</k>
+                <k weight="0.9">malam</k>
+                <k weight="0.8">woi</k>
+                <k weight="0.8">bro</k>
+            </keywords>
+        </intent>
+        <intent name="goodbye" group="basic">
+            <keywords>
+                <k weight="1.0">dadah</k>
+                <k weight="1.0">bye</k>
+                <k weight="0.9">sampai jumpa</k>
+            </keywords>
+        </intent>
+        <intent name="ask_weather" group="information">
+            <keywords>
+                <k weight="1.0">cuaca</k>
+                <k weight="0.8">panas</k>
+                <k weight="0.8">dingin</k>
+                <k weight="0.8">hujan</k>
+            </keywords>
+        </intent>
+        <intent name="nyeleneh" group="jokes">
+            <keywords>
+                <k weight="1.0">kenapa</k>
+                <k weight="0.8">ayam</k>
+                <k weight="0.7">lucu</k>
+            </keywords>
+        </intent>
+        <intent name="ask_about_ai" group="information">
+            <keywords>
+                <k weight="1.0">ai</k>
+                <k weight="1.0">artificial intelligence</k>
+                <k weight="0.9">kecerdasan buatan</k>
+                <k weight="0.8">chatbot</k>
+            </keywords>
+        </intent>
+        <intent name="fallback" group="system">
+            <keywords>
+                <!-- Dibiarkan kosong, hanya untuk item fallback -->
+            </keywords>
+        </intent>
+    </intents>
+
+    <!-- DAFTAR ENTITAS -->
+    <!-- Entitas adalah variabel dalam kalimat, seperti nama kota, produk, dll. -->
+    <entities>
+        <entity name="city">
+            <values>
+                <v>jakarta</v>
+                <v>bandung</v>
+                <v>surabaya</v>
+                <v>lampung</v>
+            </values>
+        </entity>
+    </entities>
+
+    <!-- BASIS DATA PERTANYAAN & JAWABAN (Q&A) -->
+    <qaItems>
+        <!-- Item 1: Sapaan (Bahasa Indonesia) -->
+        <item id="greet_id" lang="id" intent="greeting" relevanceWeight="1.0">
+            <questions>
+                <q>Halo</q>
+                <q>Hai</q>
+                <q>Selamat pagi</q>
+                <q>Woi, apa kabar?</q>
+            </questions>
+            <answers>
+                <a>Halo juga! Ada yang bisa dibanting, eh, dibantu?</a>
+                <a>Wih, halo bro/sis! Gimana, aman?</a>
+                <a>Yo! Ada perlu apa nih?</a>
+            </answers>
+        </item>
+
+        <!-- Item 2: Sapaan (Bahasa Inggris) -->
+        <item id="greet_en" lang="en" intent="greeting" relevanceWeight="1.0">
+            <questions>
+                <q>Hello</q>
+                <q>Hi</q>
+                <q>Good morning</q>
+            </questions>
+            <answers>
+                <a>Hello there! What can I do for you?</a>
+                <a>Hi! How's it going?</a>
+            </answers>
+        </item>
+
+        <!-- Item 3: Pertanyaan Nyeleneh -->
+        <item id="joke_ayam" lang="id" intent="nyeleneh" relevanceWeight="1.2" threshold="0.3">
+            <questions>
+                <q>Kenapa ayam menyeberang jalan?</q>
+                <q>Alasan ayam nyebrang jalan apa?</q>
+            </questions>
+            <answers>
+                <a>Soalnya kalo muter kejauhan, bensinnya mahal.</a>
+                <a>Buat ngebuktiin ke armadillo kalo itu bisa dilakuin.</a>
+                <a>Karena di seberang ada promo kopi kenangan.</a>
+            </answers>
+        </item>
+        
+        <!-- Item 4: Pertanyaan Cuaca dengan Entitas -->
+        <item id="weather_city" lang="id" intent="ask_weather" relevanceWeight="1.1">
+            <questions>
+                <q>Gimana cuaca di {city}?</q>
+                <q>Di {city} lagi hujan gak?</q>
+                <q>Info cuaca {city} dong</q>
+            </questions>
+            <answers>
+                <a>Waduh, soal cuaca di {city} mending cek BMKG langsung deh, lebih akurat dari ramalan mantan.</a>
+                <a>Cuaca di {city} ya? Bentar, gue coba terawang... Kayaknya sih... cerah berawan, tapi hati-hati sama kenangan yang tiba-tiba datang.</a>
+            </answers>
+        </item>
+
+        <!-- Item 5: Pertanyaan tentang AI dengan Konteks Lanjutan -->
+        <item id="ask_ai_intro" lang="id" intent="ask_about_ai" nextContextId="ai_discussion">
+            <questions>
+                <q>Jelasin dong soal AI</q>
+                <q>Apa itu kecerdasan buatan?</q>
+                <q>Kamu ini AI kan?</q>
+            </questions>
+            <answers>
+                <a>Gampangnya, AI itu program komputer yang dibikin biar bisa mikir dan belajar kayak manusia. Gue salah satu contohnya. Mau tau lebih dalem lagi?</a>
+                <a>AI itu kayak otak digital, bro. Bisa analisis data, ngenalin pola, sampe ngobrol kayak kita gini. Ada lagi yang mau ditanyain soal ini?</a>
+            </answers>
+        </item>
+        
+        <!-- Item 6: Jawaban Fallback (Jika tidak ada yang cocok) -->
+        <item id="fallback_id" lang="id" intent="fallback">
+            <questions>
+                <!-- Dibiarkan kosong -->
+            </questions>
+            <answers>
+                <a>Waduh, jujur gue kurang ngerti maksud lo. Bisa coba tanya pake kalimat lain?</a>
+                <a>Hmm, otak gue nge-freeze bentar. Coba tanya yang lain deh.</a>
+                <a>Pertanyaanmu terlalu berat, biar aku saja. Gak, gak, serius, coba tanya lagi yang lebih simpel.</a>
+            </answers>
+        </item>
+        <item id="fallback_en" lang="en" intent="fallback">
+            <questions>
+                <!-- Empty -->
+            </questions>
+            <answers>
+                <a>Sorry, I didn't quite get that. Could you rephrase?</a>
+                <a>My circuits are a bit fuzzy on that one. Try asking something else.</a>
+            </answers>
+        </item>
+    </qaItems>
+
+    <!-- KONTEKS PERCAKAPAN LANJUTAN -->
+    <!-- Digunakan untuk jawaban yang bergantung pada pertanyaan sebelumnya -->
+    <contexts>
+        <context id="ai_discussion">
+            <item id="ai_followup_capability" lang="id" intent="ask_about_ai">
+                <questions>
+                    <q>Bisa apa aja emang?</q>
+                    <q>Contohnya apa?</q>
+                    <q>Lebih dalem gimana maksudnya?</q>
+                </questions>
+                <answers>
+                    <a>Contohnya banyak! Mulai dari asisten virtual di hape lo, rekomendasi film di Netflix, sampe mobil yang bisa nyetir sendiri. Keren kan?</a>
+                    <a>Kemampuannya luas banget, dari ngolah bahasa kayak gue, ngenalin gambar, sampe bikin prediksi pasar saham. Basically, anything that needs a 'brain'.</a>
+                </answers>
+                <!-- Konteks bisa berlanjut lagi jika perlu dengan nextContextId di sini -->
+            </item>
+            <item id="ai_followup_no" lang="id" intent="goodbye">
+                 <questions>
+                    <q>Nggak</q>
+                    <q>Udah cukup</q>
+                    <q>Gak usah</q>
+                </questions>
+                <answers>
+                    <a>Oke, siap! Kalo ada pertanyaan lain, panggil aja lagi.</a>
+                    <a>Sip, kalo gitu. Santai...</a>
+                </answers>
+            </item>
+        </context>
+    </contexts>
+
+</chatbotConfig>
